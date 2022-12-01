@@ -2,19 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 int max_int(const int a, const int b) {
   if (a > b) {
     return a;
-  }
-  return b;
+  } return b;
 }
 
 void process_lines(int *max_calories, int *calories) {
-
   FILE *file;
-
-  file = fopen("./input.txt", "r");
+  file = fopen("../input.txt", "r");
   size_t read;
   char *line = NULL;
   size_t line_len = 0;
@@ -31,10 +27,8 @@ void process_lines(int *max_calories, int *calories) {
   *max_calories = max_int(*max_calories, *calories);
   *calories = 0;
 
-
   fclose(file);
 }
-
 
 int main(int argc, char **argv) {
 
