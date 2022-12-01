@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 void shift_array_down(int *array, int i) {
   /*
    * ([0,1,2,3], 2) -> [1,2,2,3]
@@ -26,15 +25,11 @@ void process_elf_calories(int *max_calories, int elf_calories) {
 }
 
 void process_lines(int *max_calories) {
-  int calories = 0;
-
-  FILE *file;
-
-  file = fopen("./input.txt", "r");
+  FILE *file = fopen("../input.txt", "r");
   size_t read;
   char *line = NULL;
   size_t line_len = 0;
-
+  int calories = 0;
   while ((read = getline(&line, &line_len, file)) != -1) {
     int line_val = atoi(line);
     calories += line_val;
@@ -49,12 +44,13 @@ void process_lines(int *max_calories) {
   fclose(file);
 }
 
-
 int main(int argc, char **argv) {
   int max_calories[3] = {0, 0, 0};
 
   process_lines(max_calories);
-  printf("top 3 calories: %d %d %d\n", max_calories[0], max_calories[1], max_calories[2]);
-  printf("sum of top 3 elf calories %d\n", max_calories[0] + max_calories[1] + max_calories[2]);
+  printf("top 3 calories: %d %d %d\n", max_calories[0], max_calories[1],
+         max_calories[2]);
+  printf("sum of top 3 elf calories %d\n",
+         max_calories[0] + max_calories[1] + max_calories[2]);
   return 0;
 }
