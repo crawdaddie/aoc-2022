@@ -10,7 +10,7 @@ int max_int(const int a, const int b) {
 
 void process_lines(int *max_calories, int *calories) {
   FILE *file;
-  file = fopen("../input.txt", "r");
+  file = fopen("./input.txt", "r");
   size_t read;
   char *line = NULL;
   size_t line_len = 0;
