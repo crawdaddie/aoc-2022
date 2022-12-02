@@ -17,53 +17,30 @@ int mapping(char c) {
   switch (c) {
   case 'A':
   case 'X':
-    return 1;
+    return 0;
 
   case 'B':
   case 'Y':
-    return 2;
+    return 1;
 
   case 'C':
   case 'Z':
-    return 3;
+    return 2;
   }
 }
 
 void cb(char *line, int *score) {
   int op = mapping(line[0]);
   int you = mapping(line[2]);
-  int result;
-  if (you == op) {
-    result = 3;
-  } else {
-    // does your choice beat op's?
-    // 1 > 3
-    // 2 > 1
-    // 3 > 2
-    result = 6 * (op == (((you - 1) > 0) ? you - 1 : 3));
-  };
-  *score += (you + result);
+  int result = (you - op + 1 + 3) % 3; // 0->loss, 1->draw, 2->win
+  *score += (you + 1 + result * 3);
 }
 
 void cb_part2(char *line, int *score) {
   int op = mapping(line[0]);
-  int you = mapping(line[2]);
-  int result;
-
-  switch (you) {
-  case 2:
-    // draw
-    result = 3 + op;
-    break;
-  case 3:
-    // you win
-    result = 6 + ((op + 1) > 3 ? 1 : op + 1);
-    break;
-  case 1:
-    // you lose
-    result = ((op - 1) > 0 ? op - 1 : 3);
-    break;
-  }
+  int match_result = mapping(line[2]);
+  int throw = ((op + match_result - 1) + 3) % 3; // 0->rock, 1->paper, 2->scissors
+  int result = match_result * 3 + throw + 1;
   *score += result;
 }
 
