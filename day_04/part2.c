@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../common/str_utils.h"
 
 void read_lines(void (*callback)(char *line, int line_len, int *score),
                 int *score) {
@@ -16,32 +17,10 @@ void read_lines(void (*callback)(char *line, int line_len, int *score),
   fclose(file);
 }
 
-void parsef(char *line, ...) {
-
-  va_list argp;
-  va_start(argp, line);
-  int num = 0;
-  int *save_var;
-  while (*line != '\n') {
-    if (*line == '-' || *line == ',') {
-      save_var = va_arg(argp, int *);
-      *save_var = num;
-      num = 0;
-    } else {
-      num = num * 10 + (*line - '0');
-    }
-    line++;
-  }
-
-  save_var = va_arg(argp, int *);
-  *save_var = num;
-
-  va_end(argp);
-}
 
 void cb(char *line, int len, int *score) {
   int min0, max0, min1, max1;
-  parsef(line, &min0, &max0, &min1, &max1);
+  parsef("%-%,%-%\n", line, &min0, &max0, &min1, &max1);
 
   if (max0 < min1) {
     return;
