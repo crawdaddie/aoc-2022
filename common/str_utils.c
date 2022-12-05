@@ -1,6 +1,12 @@
 #include "./str_utils.h"
 
 void parsef(char *tpl, char *line, ...) {
+  /*
+    * parsef accepts a newline-terminated template string and input string, and a variable number of int pointers
+    * and attempts to extract integers from the input marked by a % in the template and save them to the int pointers 
+    * for example: parsef("%-%,%-%\n", "8-2,4-5", &arg0, &arg1, &arg2, &arg3); will attempt to find the values\
+    * 8, 2, 4, 5 in the input string that correspond to the % in the template and save them to each &arg
+    */
 
   va_list argp;
   va_start(argp, line);
