@@ -1,0 +1,61 @@
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void read_lines(void (*callback)(char *line, int line_len, int *score),
+                int *score) {
+  FILE *file = fopen("./input.txt", "r");
+  size_t read;
+  char *line = NULL;
+  size_t line_len = 0;
+  while ((read = getline(&line, &line_len, file)) != -1) {
+    callback(line, read - 1, score);
+  }
+
+  fclose(file);
+}
+
+void parsef(char *line, ...) {
+
+  va_list argp;
+  va_start(argp, line);
+  int num = 0;
+  int *save_var;
+  while (*line != '\n') {
+    if (*line == '-' || *line == ',') {
+      save_var = va_arg(argp, int *);
+      *save_var = num;
+      num = 0;
+    } else {
+      num = num * 10 + (*line - '0');
+    }
+    line++;
+  }
+
+  save_var = va_arg(argp, int *);
+  *save_var = num;
+
+  va_end(argp);
+}
+
+void cb(char *line, int len, int *score) {
+  int min0, max0, min1, max1;
+  parsef(line, &min0, &max0, &min1, &max1);
+
+  if (max0 < min1) {
+    return;
+  }
+
+  if (max1 < min0) {
+    return;
+  }
+  *score += 1;
+}
+
+int main(int argc, char **argv) {
+  int score = 0;
+  read_lines(cb, &score);
+  printf("your score part1: %d\n", score);
+  return 0;
+}
