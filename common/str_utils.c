@@ -20,7 +20,7 @@ void parsef(char *tpl, char *line, ...) {
     if (*tpl == '%') {
       stopchar = *(tpl + 1);
       while(*line != stopchar) {
-        num = num * 10 + (*line - '0');
+        num = num * 10 + (*line - '0'); // collect digits from the input string until you reach the stopchar
         line++;
       }
       save_var = va_arg(argp, int *);
