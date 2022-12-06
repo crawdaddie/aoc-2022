@@ -1,3 +1,4 @@
+//
 //     [P]                 [C] [C]
 //     [W]         [B]     [G] [V] [V]
 //     [V]         [T] [Z] [J] [T] [S]
@@ -43,22 +44,16 @@ void cb(char *line, t_stack *stacks, int num_stacks) {
   parsef("move % from % to %\n", line, &num_crates, &st_from, &st_to);
   st_from = st_from - 1;
   st_to = st_to - 1;
-  /* printf("%d %d %d\n", num_crates, st_from, st_to); */
+  char crates[num_crates];
   for (int i = 0; i < num_crates; i++) {
-    char crate = stack_pop(&stacks[st_from]);
-    stack_push(&stacks[st_to], crate);
+    crates[i] = stack_pop(&stacks[st_from]);
+  };
+  for (int j = num_crates - 1; j >= 0; j--) {
+    stack_push(&stacks[st_to], crates[j]);
   }
 }
 
 int main(int argc, char **argv) {
-
-  /* t_stack stack[3] = { */
-  /*     {"ZN", 1}, */
-  /*     {"DCM", 2}, */
-  /*     {"P", 0}, */
-  /* }; */
-  /*  */
-  /* read_lines("./test_input.txt", cb, stack, 3); */
 
   t_stack stack[9] = {
       {"FRW", 2},      {"THMCDVWP", 7}, {"PMZNL", 4},
@@ -66,7 +61,7 @@ int main(int argc, char **argv) {
       {"WVLQZJGC", 7}, {"PNRFWTVC", 7}, {"JWHGRSV", 6},
   };
 
-  read_lines("./input.txt", cb, stack, 3);
+  read_lines("./input.txt", cb, stack, 9);
 
   for (int i = 0; i < 9; i++) {
     t_stack st = stack[i];
