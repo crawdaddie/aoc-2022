@@ -22,28 +22,13 @@ void process_three_lines(void (*callback)(char *line0, char *line1, char *line2,
 }
 
 int char_to_alphabet_idx(char c) {
-  int ascii = c;
-  if (ascii >= 65 && ascii <= 90) {
-    return ascii - 39;
+  if (c >= 'a' && c <= 'z') {
+    return c - 'a';
   }
-  if (ascii >= 97 && ascii <= 122) {
-    return ascii - 97;
+  if (c >= 'A' && c <= 'Z') {
+    return c - 'A' + 26;
   }
   return 0;
-}
-
-void print_bits(uint64_t bits) {
-  int b[64] = {0};
-  int i;
-  for (i = 0; bits > 0; i++) {
-    b[i] = (int)(bits % 2);
-    bits = bits / 2;
-  }
-
-  for (i = 0; i < 64; i++) {
-    printf("%d", b[i]);
-  };
-  printf("\n");
 }
 
 uint64_t chars_to_hot_ones(char *line) {
@@ -77,6 +62,6 @@ void cb(char *line0, char *line1, char *line2, int *score) {
 int main(int argc, char **argv) {
   int score = 0;
   process_three_lines(cb, &score);
-  printf("your score part2: %d\n", score);
+  printf("%d\n", score);
   return 0;
 }
