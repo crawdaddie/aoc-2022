@@ -22,26 +22,22 @@ int test_parsef_day5() {
   return arg0 == 2 && arg1 == 4 && arg2 == 9;
 }
 
+int test_parsef_dyn() {
+
+}
+
+void run_test(char *name, int (*test_func)()) {
+  if (!test_func()) {
+    printf("%s %s failed\n", red_cross, name);
+    return;
+  }
+  printf("%s %s passed\n", green_tick, name);
+}
+
+
 int main(int argc, char **argv) {
-  if (!test_parsef()) {
-    printf("%s test_parsef failed\n", red_cross);
-    return 1;
-  };
-  printf("%s test_parsef passed\n", green_tick);
-
-  if (!test_parsef_2()) {
-    printf("%s test_parsef_2 failed\n", red_cross);
-    return 1;
-  };
-  printf("%s test_parsef_2 passed\n", green_tick);
-
-  if (!test_parsef_day5()) {
-    printf("%s test_parsef_day5 failed\n", red_cross);
-    return 1;
-  };
-
-  printf("%s test_parsef_day5 passed\n", green_tick);
-
+  run_test("day 4", test_parsef);
+  run_test("test_parsef", test_parsef_2);
+  run_test("test_parsef day 5", test_parsef_day5);
   return 0;
-
 }

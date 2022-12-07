@@ -4,4 +4,5 @@
 #include <stdio.h>
 
 void parsef(char *tpl, char *line, ...);
+void parsef_dyn(char *tpl, char *line, ...);
 #endif
