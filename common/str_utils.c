@@ -36,36 +36,32 @@ void parsef(char *tpl, char *line, ...) {
   va_end(argp);
 }
 
-void parse_int(va_list *argp, char **line, char stopchar) {
+int parse_int(char **line, char stopchar) {
   int num = 0;
   while (**line != stopchar) {
     num = num * 10 + (**line - '0'); // collect digits from the input string
-                                     // until you reach the stopchar
     (*line)++;
   }
-  int *save_var = va_arg(*argp, int *);
-  *save_var = num;
+  return num;
 }
 
-void parse_str(va_list *argp, char **line, char stopchar) {
+char *parse_str(char **line, char stopchar) {
   int len = 0;
   while (**line != stopchar) {
     len++; // until you reach the stopchar
     (*line)++;
   }
-
   char *cp = malloc(sizeof(char) * len);
-  char *save_var = va_arg(*argp, char *);
   /* strcpy(cp, *line - len); */
-  printf("string to get %s\n", (*line - len));
-  save_var = (*line - len);
+  /* printf("copy %s\n", cp); */
+  /* return cp; */
+  return (*line - len);
 }
 
 void parsef_dyn(char *tpl, char *line, ...) {
   va_list argp;
   va_start(argp, line);
-  int num = 0;
-  int *save_var;
+
   char stopchar;
   char parsef_type;
 
@@ -75,21 +71,24 @@ void parsef_dyn(char *tpl, char *line, ...) {
       tpl++;
 
       stopchar = *(tpl + 1);
-      printf("type: %c stop '%c'\n", parsef_type, stopchar);
       switch (parsef_type) {
-      case 'd':
-        parse_int(&argp, &line, stopchar);
+      case 'd': {
+          int *save_var = va_arg(argp, int *);
+          *save_var = parse_int(&line, stopchar);
+        }
         break;
 
-      case 's':
-        parse_str(&argp, &line, stopchar);
+      case 's': {
+          char **save_var = (char **)va_arg(argp, char **);
+          *save_var = parse_str(&line, stopchar);
+        }
         break;
+
       default:
         while (*line != stopchar) {
           line++;
         }
       }
-
       tpl++;
     } else {
       tpl++;

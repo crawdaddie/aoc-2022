@@ -1,4 +1,4 @@
-#include "./str_utils.h"
+#include "../str_utils.h"
 #include <stdio.h>
 
 static const char *green_tick = "\033[92m✓\033[0m";
@@ -25,10 +25,11 @@ int test_parsef_day5() {
 int test_parsef_dyn() {
   int arg0, arg1, arg2;
   char *arg3;
-  parsef_dyn("move %d from %d to %d %s \n", "move 21 from 4 to 9 please \n",
-             &arg0, &arg1, &arg2);
+  parsef_dyn("move %d from %d to %d %s\n", "move 21 from 4 to 9 please\n",
+             &arg0, &arg1, &arg2, &arg3);
   printf("%d %d %d %s\n", arg0, arg1, arg2, arg3);
-  return arg0 == 21 && arg1 == 4 && arg2 == 9;
+
+  return arg0 == 21 && arg1 == 4 && arg2 == 9 && strcmp(arg3, "please");
 }
 
 void run_test(char *name, int (*test_func)()) {
