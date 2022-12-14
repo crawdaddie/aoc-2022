@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef uint64_t Int;
 #define QUEUE_MAX 36
 #define LCM 9699690
-typedef int (*t_operation)(int worry);
-typedef int (*t_pass)(int worry);
+typedef Int (*t_operation)(int worry);
+typedef Int (*t_pass)(int worry);
 
-typedef uint64_t Int;
 
 typedef struct q_int {
   Int *items;
@@ -44,7 +44,7 @@ void queue_push(q_int *q, Int newitem) {
   q->top = (q->top + 1) % QUEUE_MAX;
 };
 Int queue_pop_left(q_int *q) {
-  int popped_left = q->items[q->bottom];
+  Int popped_left = q->items[q->bottom];
   q->items[q->bottom] = 0;
   q->bottom = (q->bottom + 1) % QUEUE_MAX;
   return popped_left;
@@ -59,7 +59,7 @@ Int queue_pop_left(q_int *q) {
 #define P99_PROTECT(...) __VA_ARGS__
 
 #define MONKEY_OP(name, ...)                                                   \
-  Int name##_operation(int worry) { return (__VA_ARGS__) % LCM; }
+  Int name##_operation(Int worry) { return __VA_ARGS__; }
 
 #define MONKEY_PASS(name, test, t, f)                                          \
   int name##_pass(Int worry) {                                                 \
