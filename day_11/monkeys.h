@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef uint64_t Int;
+typedef uint32_t Int;
 #define QUEUE_MAX 36
 #define LCM 9699690
 typedef Int (*t_operation)(int worry);
