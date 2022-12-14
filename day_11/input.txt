@@ -1,0 +1,57 @@
+Monkey_0:
+  Starting_items: 75, 63
+  Operation: new = old * 3
+  Test: divisible by 11
+    true:
+      Monkey_7
+    false:
+      Monkey_2
+
+Monkey_1:
+  Starting_items: 65, 79, 98, 77, 56, 54, 83, 94
+  Operation: new = old + 3
+  Test: divisible by 2
+    true: throw to Monkey_2
+    false: throw to Monkey_0
+
+Monkey_2:
+  Starting_items: 66
+  Operation: new = old + 5
+  Test: divisible by 5
+    true: throw to Monkey_7
+    false: throw to Monkey_5
+
+Monkey_3:
+  Starting_items: 51, 89, 90
+  Operation: new = old * 19
+  Test: divisible by 7
+    true: throw to Monkey_6
+    false: throw to Monkey_4
+
+Monkey_4:
+  Starting_items: 75, 94, 66, 90, 77, 82, 61
+  Operation: new = old + 1
+  Test: divisible by 17
+    true: throw to Monkey_6
+    false: throw to Monkey_1
+
+Monkey_5:
+  Starting_items: 53, 76, 59, 92, 95
+  Operation: new = old + 2
+  Test: divisible by 19
+    true: throw to Monkey_4
+    false: throw to Monkey_3
+
+Monkey_6:
+  Starting_items: 81, 61, 75, 89, 70, 92
+  Operation: new = old * old
+  Test: divisible by 3
+    true: throw to Monkey_0
+    false: throw to Monkey_1
+
+Monkey_7:
+  Starting_items: 81, 86, 62, 87
+  Operation: new = old + 8
+  Test: divisible by 13
+    true: throw to Monkey_3
+    false: throw to Monkey_5

@@ -18,7 +18,7 @@ void render_sprite(int cycle, int x) {
 int get_instruction(char *line) {
   if (*line == 'a') {
     int v;
-    parsef_dyn("addx %d\n", line, &v);
+    parsef_int("addx %d\n", line, &v);
     return v;
   }
   return 0;

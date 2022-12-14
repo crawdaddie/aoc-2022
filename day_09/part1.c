@@ -121,11 +121,6 @@ void process_lines(char *input_file, int *score) {
   char *line = NULL;
   size_t line_len = 0;
   int i = 0;
-  /* Knot r[10]; */
-  /* for (int ri = 0; ri < 10; ri++) { */
-  /*   r[ri].x = COLS / 2; */
-  /*   r[ri].y = ROWS / 2; */
-  /* } */
   Knot h = {COLS / 2, ROWS / 2};
   Knot t = {COLS / 2, ROWS / 2};
 
@@ -145,7 +140,6 @@ void process_lines(char *input_file, int *score) {
         pos[t.y][t.x] = 1;
         *score += 1;
       }
-      /* render(h, t, pos); */
     }
 
     i++;

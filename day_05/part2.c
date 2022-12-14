@@ -41,7 +41,7 @@ void read_lines(char *input_file,
 
 void cb(char *line, t_stack *stacks, int num_stacks) {
   int num_crates, st_from, st_to;
-  parsef("move % from % to %\n", line, &num_crates, &st_from, &st_to);
+  parsef_int("move % from % to %\n", line, &num_crates, &st_from, &st_to);
   st_from = st_from - 1;
   st_to = st_to - 1;
   char crates[num_crates];

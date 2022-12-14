@@ -38,7 +38,7 @@ void read_lines(char *input_file,
 
 void cb(char *line, t_stack *stacks, int num_stacks) {
   int num_crates, st_from, st_to;
-  parsef("move % from % to %\n", line, &num_crates, &st_from, &st_to);
+  parsef_int("move % from % to %\n", line, &num_crates, &st_from, &st_to);
   st_from = st_from - 1;
   st_to = st_to - 1;
   /* printf("%d %d %d\n", num_crates, st_from, st_to); */
@@ -59,9 +59,11 @@ int main(int argc, char **argv) {
   /* read_lines("./test_input.txt", cb, stack, 3); */
 
   t_stack stack[9] = {
-      {"FRW", 2},      {"THMCDVWP", 7}, {"PMZNL", 4},
-      {"JCHR", 3},     {"CPGHQTB", 6},  {"GCWLFZ", 5},
-      {"WVLQZJGC", 7}, {"PNRFWTVC", 7}, {"JWHGRSV", 6},
+      {.items = "FRW", .top = 2},      {.items = "THMCDVWP", .top = 7},
+      {.items = "PMZNL", .top = 4},    {.items = "JCHR", .top = 3},
+      {.items = "CPGHQTB", .top = 6},  {.items = "GCWLFZ", .top = 5},
+      {.items = "WVLQZJGC", .top = 7}, {.items = "PNRFWTVC", .top = 7},
+      {.items = "JWHGRSV", .top = 6},
   };
 
   read_lines("./input.txt", cb, stack, 3);
