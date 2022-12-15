@@ -4,16 +4,16 @@
 #include <stdlib.h>
 
 #define QUEUE_MAX 64
-typedef struct t_queue_int {
+typedef struct q_int {
   int items[QUEUE_MAX];
   int top;
   int bottom;
-} t_queue_int;
+} q_int;
 
-void queue_new(t_queue_int *q);
-int queue_is_full(t_queue_int *q);
-int queue_is_empty(t_queue_int *q);
-void queue_push(t_queue_int *q, int newitem);
-char queue_pop_left(t_queue_int *q);
+void queue_new(q_int *q);
+int queue_is_full(q_int *q);
+int queue_is_empty(q_int *q);
+void queue_push(q_int *q, int newitem);
+char queue_pop_left(q_int *q);
 
 #endif
