@@ -6,7 +6,7 @@ day_11 () {
 }
 
 general () {
-  cd $1 && gcc part1.c -o part1 && time -l ./part1
+  cd $1 && gcc part1.c -o part1 && time ./part1
 }
 
 function_exists() {

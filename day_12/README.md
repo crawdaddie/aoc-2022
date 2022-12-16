@@ -37,14 +37,16 @@ n
 o
 . (This also means that the elevation of the destination square can be much lower than the elevation of your current square.)
 For example:
-S
-abqponm
+
+
+```
+Sabqponm
 abcryxxl
-accsz
-E
-xk
+accszExk
 acctuvwj
 abdefghi
+```
+
 Here, you start in the top-left corner; your goal is near the middle. You could start by moving down or right, but eventually you'll need to head toward the 
 e
  at the bottom. From there, you can spiral around to the goal:
