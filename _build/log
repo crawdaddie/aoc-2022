@@ -1,0 +1,5 @@
+# dune init project day_01_ocaml
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Workspace root: /Users/adam/projects/puzzles/aoc-2022
+# Auto-detected concurrency: 8

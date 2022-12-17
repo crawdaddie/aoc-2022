@@ -2,7 +2,6 @@
 #include "../common/queue.h"
 #include <stdio.h>
 
-#define TEST
 
 #ifdef TEST
 #define ROWS 5
@@ -26,6 +25,7 @@ void debug_matrix(int matrix[ROWS][COLS]) {
 typedef struct pos {
   int x;
   int y;
+  int dist;
 } pos;
 
 QUEUE_TYPE(pos);
@@ -78,10 +78,11 @@ void enqueue_neighbors(pos start, pos end, int matrix[ROWS][COLS],
   for (int i = 0; i < 4; i++) {
     pos dir = dirs[i];
 
-    pos neighbor = {start.x + dir.x, start.y + dir.y};
+    pos neighbor = {start.x + dir.x, start.y + dir.y, start.dist + 1};
 
     if (!(visited[neighbor.y][neighbor.x]) && pos_in_bounds(neighbor) &&
         relative_height(start, neighbor, matrix) <= 1) {
+      visited[neighbor.y][neighbor.x] = 1;
       q_pos_push(q, neighbor);
     }
   }
@@ -91,31 +92,20 @@ int main(int argc, char **argv) {
   int score = 0;
   int matrix[ROWS][COLS];
   pos start, end;
-  WITH_INPUT("./test_input.txt", populate_matrix, matrix, &start, &end);
-
-  debug_matrix(matrix);
-
-  printf("start %d %d\n", start.x, start.y);
-  printf("end %d %d\n", end.x, end.y);
-  t_q_pos *q = q_pos_new(&start, 1, 400);
-  int level = 0;
-
-  int num_neighbors = 0;
+  WITH_INPUT_LINES("./input.txt", populate_matrix, matrix, &start, &end);
+  t_q_pos *q = q_pos_new(&start, 1, ROWS * COLS);
   int visited[ROWS][COLS] = {0};
   while (!q_pos_is_empty(q)) {
     pos p = q_pos_pop_left(q);
-    visited[p.y][p.x] = 1;
 
     if (p.x == end.x && p.y == end.y) {
+      printf("found end in %d steps\n", p.dist);
       break;
     }
 
     enqueue_neighbors(p, end, matrix, visited, q);
-    level++;
   }
 
-  debug_matrix(visited);
-  printf("shortest path %d\n", level);
 
   return 0;
 }
