@@ -3,14 +3,8 @@
 #include <stdio.h>
 
 
-#ifdef TEST
-#define ROWS 5
-#define COLS 8
-#endif
-#ifndef TEST
 #define ROWS 41
 #define COLS 132
-#endif
 
 void debug_matrix(int matrix[ROWS][COLS]) {
 
@@ -64,24 +58,28 @@ int pos_in_bounds(pos pos) {
   return pos.x >= 0 && pos.x < COLS && pos.y >= 0 && pos.y < ROWS;
 }
 
-int relative_height(pos p, pos neighbor, int matrix[ROWS][COLS]) {
+int relative_height(pos p, pos neighbor, int grid[ROWS][COLS]) {
   int p_height, n_height;
-  p_height = matrix[p.y][p.x];
-  n_height = matrix[neighbor.y][neighbor.x];
+  p_height = grid[p.y][p.x];
+  n_height = grid[neighbor.y][neighbor.x];
   return n_height - p_height;
 }
 
 static const pos dirs[4] = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}}; // U D L R
-void enqueue_neighbors(pos start, pos end, int matrix[ROWS][COLS],
+
+void enqueue_neighbors(pos p, int grid[ROWS][COLS],
                        int visited[ROWS][COLS], t_q_pos *q) {
 
   for (int i = 0; i < 4; i++) {
     pos dir = dirs[i];
 
-    pos neighbor = {start.x + dir.x, start.y + dir.y, start.dist + 1};
+    pos neighbor = {p.x + dir.x, p.y + dir.y, p.dist + 1};
 
-    if (!(visited[neighbor.y][neighbor.x]) && pos_in_bounds(neighbor) &&
-        relative_height(start, neighbor, matrix) <= 1) {
+    if (
+      !(visited[neighbor.y][neighbor.x]) &&
+      pos_in_bounds(neighbor) &&
+      relative_height(p, neighbor, grid) >= -1 
+    ) {
       visited[neighbor.y][neighbor.x] = 1;
       q_pos_push(q, neighbor);
     }
@@ -90,20 +88,22 @@ void enqueue_neighbors(pos start, pos end, int matrix[ROWS][COLS],
 
 int main(int argc, char **argv) {
   int score = 0;
-  int matrix[ROWS][COLS];
+  int grid[ROWS][COLS];
   pos start, end;
-  WITH_INPUT_LINES("./input.txt", populate_matrix, matrix, &start, &end);
-  t_q_pos *q = q_pos_new(&start, 1, ROWS * COLS);
+  WITH_INPUT_LINES("./input.txt", populate_matrix, grid, &start, &end);
+
+  t_q_pos *q = q_pos_new(&end, 1, ROWS * COLS); // start at end and stop at first 'a' (height 0) grid point
+
   int visited[ROWS][COLS] = {0};
   while (!q_pos_is_empty(q)) {
     pos p = q_pos_pop_left(q);
 
-    if (p.x == end.x && p.y == end.y) {
+    if (grid[p.y][p.x] == 0) {
       printf("found end in %d steps\n", p.dist);
       break;
     }
 
-    enqueue_neighbors(p, end, matrix, visited, q);
+    enqueue_neighbors(p, grid, visited, q);
   }
 
 
