@@ -5,9 +5,10 @@
 
 #define QUEUE_MAX 64
 typedef struct q_int {
-  int items[QUEUE_MAX];
+  int *items;
   int top;
   int bottom;
+  int max;
 } q_int;
 
 void queue_new(q_int *q);
