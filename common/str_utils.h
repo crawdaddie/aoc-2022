@@ -7,4 +7,6 @@
 
 void parsef_int(char *tpl, char *line, ...);
 void parsef(char *tpl, char *line, ...);
+
+void parse_int_n(char **line, char *stopchars, int num_stopchars, int *val);
 #endif

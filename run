@@ -2,11 +2,13 @@
 
 day_11 () {
   cd day_11 && gcc main.c -o main && time -h ./main
-
 }
 
 general () {
-  cd $1 && gcc part1.c -o part1 && time ./part1
+  $3
+
+  cd $1
+  gcc part1.c -o part1 && time ./part1
 }
 
 function_exists() {
@@ -15,4 +17,11 @@ function_exists() {
 }
 
 dir=$(printf "day_%02d\n" $1)
-function_exists $dir && "$dir" || general $dir
+
+function_exists $dir && $("$dir $@"; exit 1) 
+
+if [ "$3" == "-w" ]; then
+  fswatch -o $dir -i "\\.c$" | xargs -n1 -I{} general $dir $@
+else
+  general $@
+fi

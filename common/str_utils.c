@@ -52,6 +52,34 @@ int parse_int(char **line, char stopchar) {
   return num * neg;
 }
 
+int is_stopchar(char **line, char *stopchar, int num_stopchars) {
+  for (int i = 0; i < num_stopchars; i++) {
+    if (**line == stopchar[i]) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+void parse_int_n(char **line, char *stopchars, int num_stopchars, int *val) {
+  int num = 0;
+  int neg = 1;
+  int pos = 0;
+  if (**line == '-') {
+    neg = -1;
+    (*line)++;
+    pos++;
+  } else {
+    neg = 1;
+  };
+  while (is_stopchar(line, stopchars, num_stopchars)) {
+    num = num * 10 + (**line - '0'); // collect digits from the input string
+    (*line)++;
+    pos++;
+  }
+  *val = num * neg;
+}
+
 char *parse_str(char **line, char stopchar) {
   int len = 0;
   while (**line != stopchar) {
