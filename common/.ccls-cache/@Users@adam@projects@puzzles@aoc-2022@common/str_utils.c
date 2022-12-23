@@ -1,6 +1,6 @@
 #include "./str_utils.h"
 
-void parsef(char *tpl, char *line, ...) {
+void parsef_int(char *tpl, char *line, ...) {
   /*
    * parsef accepts a newline-terminated template string and input string, and a
    * variable number of int pointers and attempts to extract integers from the
@@ -38,11 +38,48 @@ void parsef(char *tpl, char *line, ...) {
 
 int parse_int(char **line, char stopchar) {
   int num = 0;
+  int neg = 1;
+  if (**line == '-') {
+    neg = -1;
+    (*line)++;
+  } else {
+    neg = 1;
+  };
   while (**line != stopchar) {
     num = num * 10 + (**line - '0'); // collect digits from the input string
     (*line)++;
   }
-  return num;
+  return num * neg;
+}
+
+int is_stopchar(char **line, char *stopchar, int num_stopchars) {
+  for (int i = 0; i < num_stopchars; i++) {
+    if (**line == stopchar[i]) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+void parse_int_n(char **line, char *stopchars, int num_stopchars, int *val) {
+  int num = 0;
+  int neg = 1;
+  int pos = 0;
+  if (**line == '-') {
+    neg = -1;
+    (*line)++;
+    pos++;
+  } else {
+    neg = 1;
+  };
+
+  while (!is_stopchar(line, stopchars, num_stopchars)) {
+    num = num * 10 + (**line - '0'); // collect digits from the input string
+    (*line)++;
+    pos++;
+  }
+
+  *val = num * neg;
 }
 
 char *parse_str(char **line, char stopchar) {
@@ -58,7 +95,18 @@ char *parse_str(char **line, char stopchar) {
   return (*line - len);
 }
 
-void parsef_dyn(char *tpl, char *line, ...) {
+int find_char_idx(char *line, char stopchar) {
+  int idx;
+  while (line[idx] != '\0') {
+    if (line[idx] == stopchar) {
+      return idx;
+    }
+    idx++;
+  }
+  return -1;
+};
+
+void parsef(char *tpl, char *line, ...) {
   va_list argp;
   va_start(argp, line);
 
@@ -73,16 +121,19 @@ void parsef_dyn(char *tpl, char *line, ...) {
       stopchar = *(tpl + 1);
       switch (parsef_type) {
       case 'd': {
-          int *save_var = va_arg(argp, int *);
-          *save_var = parse_int(&line, stopchar);
-        }
-        break;
+        int *save_var = va_arg(argp, int *);
+        *save_var = parse_int(&line, stopchar);
+      } break;
 
       case 's': {
-          char **save_var = (char **)va_arg(argp, char **);
-          *save_var = parse_str(&line, stopchar);
-        }
-        break;
+        char **save_var = (char **)va_arg(argp, char **);
+        *save_var = parse_str(&line, stopchar);
+      } break;
+
+      case 'c': {
+        char *save_var = (char *)va_arg(argp, char *);
+        *save_var = *line;
+      } break;
 
       default:
         while (*line != stopchar) {

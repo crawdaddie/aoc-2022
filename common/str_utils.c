@@ -72,11 +72,13 @@ void parse_int_n(char **line, char *stopchars, int num_stopchars, int *val) {
   } else {
     neg = 1;
   };
-  while (is_stopchar(line, stopchars, num_stopchars)) {
+
+  while (!is_stopchar(line, stopchars, num_stopchars)) {
     num = num * 10 + (**line - '0'); // collect digits from the input string
     (*line)++;
     pos++;
   }
+
   *val = num * neg;
 }
 
@@ -92,6 +94,17 @@ char *parse_str(char **line, char stopchar) {
   /* return cp; */
   return (*line - len);
 }
+
+int find_char_idx(char *line, char stopchar) {
+  int idx;
+  while (line[idx] != '\0') {
+    if (line[idx] == stopchar) {
+      return idx;
+    }
+    idx++;
+  }
+  return -1;
+};
 
 void parsef(char *tpl, char *line, ...) {
   va_list argp;

@@ -16,16 +16,4 @@ int stack_is_empty(t_stack *s);
 void stack_push(t_stack *s, char newitem);
 char stack_pop(t_stack *s);
 
-typedef struct t_queue_int {
-  int items[STACK_MAX];
-  int top;
-  int bottom;
-} t_queue_int;
-
-void queue_new(t_queue_int *q);
-int queue_is_full(t_queue_int *q);
-int queue_is_empty(t_queue_int *q);
-void queue_push(t_queue_int *q, int newitem);
-char queue_pop_left(t_queue_int *q);
-
 #endif

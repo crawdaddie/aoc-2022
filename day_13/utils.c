@@ -1,5 +1,6 @@
 #include "./utils.h"
 #include "../common/str_utils.h"
+#include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +38,7 @@ char *list_pop(t_list_str *l) {
     return NULL;
   }
   char *item = l->items[l->length - 1];
+  l->items[l->length - 1] = NULL;
   l->length -= 1;
   return item;
 }
@@ -54,15 +56,16 @@ int int_val(char *str) {
     return v;
   };
 }
-void print_stack(t_list_str *st) {
-  for (int i = 0; i < st->length; i++) {
-    printf("L%d: `%s`\n", i, st->items[i]);
+void print_stack(t_list_str *st0, t_list_str *st1) {
+  int max = (st0->length > st1->length ? st0->length : st1->length);
+  for (int i = 0; i < max; i++) {
+    printf("%d: `%s \t\t %s`\n", i, st0->items[i], st1->items[i]);
   }
   printf("-------\n");
 }
 
 int compare_lines(t_list_str *l, t_list_str *r) {
-  while (!list_is_empty(l) && !list_is_empty(r)) {
+  while (!list_is_empty(l) || !list_is_empty(r)) {
 
     char *left = list_pop(l);
     char *right = list_pop(r);
@@ -74,8 +77,8 @@ int compare_lines(t_list_str *l, t_list_str *r) {
       right++;
     }
 
-    printf("l: `%s`\n", left);
-    printf("r: `%s`\n", right);
+    print_stack(l, r);
+
     if (digit(left) && digit(right)) {
       int left_val, right_val;
       parse_int_n(&left, ",]", 2, &left_val);
@@ -87,7 +90,6 @@ int compare_lines(t_list_str *l, t_list_str *r) {
 
       list_append(l, left + 1);
       list_append(r, right + 1);
-      continue;
     }
 
     if (list_start(left) && list_start(right)) {
@@ -97,12 +99,14 @@ int compare_lines(t_list_str *l, t_list_str *r) {
     }
 
     if (list_start(left) && digit(right)) {
+      list_append(l, left + 1);
+      list_append(r, right);
+      continue;
     }
 
     if (list_end(left) && list_end(right)) {
       l->items[l->length - 1] = left + 1;
       r->items[r->length - 1] = right + 1;
-
       continue;
     }
   }
