@@ -113,7 +113,7 @@ void parsef(char *tpl, char *line, ...) {
   char stopchar;
   char parsef_type;
 
-  while (*tpl != '\n') {
+  while (*tpl != '\0') {
     if (*tpl == '%') {
       parsef_type = *(tpl + 1);
       tpl++;
@@ -127,7 +127,7 @@ void parsef(char *tpl, char *line, ...) {
 
       case 's': {
         char **save_var = (char **)va_arg(argp, char **);
-        *save_var = parse_str(&line, stopchar);
+        *save_var = strsep(&line, &stopchar);
       } break;
 
       case 'c': {
