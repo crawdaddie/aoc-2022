@@ -52,3 +52,8 @@ Mkfile.old
 dkms.conf
 .ccls/
 .ccls-cache/**
+# CCLS (language server for C/C++)
+.ccls-cache/
+
+# config cmake file for vim autocompletion
+compile_commands.json
