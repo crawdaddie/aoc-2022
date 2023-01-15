@@ -12,7 +12,7 @@ void print_bits_16(uint16_t bits) {
     bits = bits / 2;
   }
 
-  for (i = 0; i < 16; i++) {
+  for (i = 0; i < 10; i++) {
     printf("%d", b[i]);
   };
   printf("\n");
@@ -25,7 +25,8 @@ typedef struct node {
 } node;
 
 #ifdef TEST
-static const uint16_t TEST_ALL_OPEN = (uint16_t)-1 >> 6;
+static const uint16_t TEST_ALL_OPEN = (uint16_t)-1 >> 5;
+
 typedef struct state {
   int total_flow;
   int valve;
@@ -74,7 +75,6 @@ void resize_queue(queue *q) {
     q->top = q->top + q->max;
   }
   q->top = q->max + q->bottom + 1;
-  q->max += QUEUE_MAX;
 }
 void queue_push(queue *q, state newitem) {
   if (queue_is_full(q)) {
@@ -131,13 +131,14 @@ void debug_valves(node valves[ALPHA_CHARS], int valve_indices[NUM_VALVES]) {
 
   for (int i = 0; i < NUM_VALVES; i++) {
     node v = valves[valve_indices[i]];
-    printf("valve #%d flow_rate: %d", i, v.flow_rate);
+    printf("valve #%d [%03d] flow_rate: %03d", i, valve_indices[i],
+           v.flow_rate);
     int l = v.tunnels->length;
 
     printf(" tunnels: ");
 
     for (int j = 0; j < l; j++) {
-      printf("t %d ", list_int_at(v.tunnels, j));
+      printf("t %03d ", list_int_at(v.tunnels, j));
     }
 
     printf("\n");
@@ -152,31 +153,29 @@ void bfs_valves(int valve_indices[NUM_VALVES],
   state state = {0, 0, 0, 0};
   queue_push(queue, state);
 
-  while (queue_is_empty(queue) && state.open_valves != TEST_ALL_OPEN) {
+  while (!queue_is_empty(queue) && state.open_valves != TEST_ALL_OPEN &&
+         state.minute <= 31) {
     state = queue_pop_left(queue);
-
     debug_state(state);
 
     node valve = valves[state.valve];
+
     int flow_rate = valve.flow_rate;
 
-    int opening = open_valve(valve, &state);
+    open_valve(valve, &state);
 
     for (int t = 0; t < valve.tunnels->length; t++) {
       int tunnel = list_int_at(valve.tunnels, t);
       node next_valve = valves[tunnel];
-      if (!valve_is_open(next_valve, state) && opening) {
 
-        struct state next_state = {
-            .total_flow = project_total_flow(state, next_valve),
-            .valve = tunnel,
-            .minute = state.minute + 1,
-            .open_valves = state.open_valves,
-        };
+      struct state next_state = {
+          .total_flow = project_total_flow(state, next_valve),
+          .valve = tunnel,
+          .minute = state.minute + 1,
+          .open_valves = state.open_valves,
+      };
 
-        queue_push(queue, next_state);
-      }
+      queue_push(queue, next_state);
     }
   }
-  debug_state(state);
 }
