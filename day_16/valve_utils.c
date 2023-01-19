@@ -26,7 +26,6 @@ typedef struct node {
 
 #ifdef TEST
 static const uint16_t TEST_ALL_OPEN = (uint16_t)-1 >> 5;
-
 typedef struct state {
   int total_flow;
   int valve;
@@ -143,6 +142,22 @@ void debug_valves(node valves[ALPHA_CHARS], int valve_indices[NUM_VALVES]) {
 
     printf("\n");
   }
+}
+
+typedef struct Valves {
+  node nodes[ALPHA_CHARS * ALPHA_CHARS];
+  int indices[NUM_VALVES];
+  int distances[NUM_VALVES][NUM_VALVES];
+} Valves;
+
+int valve_idx_dist(Valves Valves, int i, int j) {
+  return Valves.distances[i][j];
+}
+int valve_dist(Valves Valves, node i, node j) {
+  return Valves.distances[Valves.indices[i.idx]][Valves.indices[j.idx]];
+}
+node valve_at_slot(Valves Valves, int slot) {
+  return Valves.nodes[Valves.indices[slot]];
 }
 
 void bfs_valves(int valve_indices[NUM_VALVES],
